@@ -1,0 +1,16 @@
+scrapy
+bs4
+lxml
+requests
+django
+redis
+selenium
+feedparser
+requests
+django-crontab
+pyecharts
+gunicorn
+gevent
+pyyaml
+ua-parser
+user-agents

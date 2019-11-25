@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-148499980-1"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+
+        function gtag() {
+            dataLayer.push(arguments);
+        }
+
+        gtag('js', new Date());
+
+        gtag('config', 'UA-148499980-1');
+    </script>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <meta name="referrer" content="no-referrer">
+    <meta name="referrer" content="never">
+
+    <title>Oh My RSS - 这才是我要的RSS</title>
+    <link rel="stylesheet" href="/assets/css/lib.css">
+    <link rel="stylesheet" href="/assets/css/app.css?v=11">
+    <link rel="shortcut icon" href="/assets/img/favicon.ico">
+</head>
+<body>
+
+<div class="preloader-wrapper big active" id="omrss-loader">
+    <div class="spinner-layer spinner-green-only">
+        <div class="circle-clipper left">
+            <div class="circle"></div>
+        </div>
+        <div class="gap-patch">
+            <div class="circle"></div>
+        </div>
+        <div class="circle-clipper right">
+            <div class="circle"></div>
+        </div>
+    </div>
+</div>
+
+<header id="omrss-header">
+    {# 顶部导航栏 #}
+    {% include 'top/nav.html' %}
+</header>
+
+<main>
+    {# 页面内容 #}
+    <div>
+        <div class="eal lighten-2 cnt-left" id="omrss-left">
+            <div id="omrss-cnt-list">
+                {# 内容列表 #}
+                {% include 'left/default.html' %}
+            </div>
+
+        </div>
+
+        <div class="eal lighten-5 cnt-right" id="omrss-main">
+            {% include 'intro.html' %}
+        </div>
+    </div>
+</main>
+
+{# 底部 #}
+{% include 'bottom/footer.html' %}
+
+<script src="/assets/js/lib.js"></script>
+<script src="/assets/js/app.js?v=11"></script>
+</body>
+</html>

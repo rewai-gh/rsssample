@@ -1,0 +1,29 @@
+<div class="card-panel hoverable" id="omrss-article-bottom">
+
+    {% if article.site.copyright == 20 or article.site.copyright == 0 %}
+        <div class="text-darken-2 omrss-article-bottom center-align">
+            <a href="{{ article.src_url }}" target="_blank" class="tooltipped ev-open-src" data-tooltip="查看原文"
+               data-position="top" data-id="{{ article.uindex }}">
+                <i class="material-icons omrss-article-bottom">open_in_new</i> 查看原文</a>
+        </div>
+    {% else %}
+        <div class="text-darken-2 omrss-article-bottom center-align">
+            <a href="{{ article.src_url }}" target="_blank" class="tooltipped ev-open-src" data-tooltip="去原文留言"
+               data-position="top" data-id="{{ article.uindex }}">
+                <i class="material-icons omrss-article-bottom">open_in_new</i> 去原文留言</a>
+        </div>
+    {% endif %}
+
+
+</div>
+
+<script>
+    $('#omrss-modal-qrcode').modal({"dismissible": true});
+    {% if article.site.copyright == 20 or article.site.copyright == 0 %}
+        $('#omrss-third').css('overflow', 'hidden');
+        $('#omrss-third').css('max-height', getBriefHeight());
+        $('.cnt-right').css('overflow-y', 'hidden');
+    {% else %}
+        $('.cnt-right').css('overflow-y', 'scroll');
+    {% endif %}
+</script>

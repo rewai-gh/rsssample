@@ -1,0 +1,63 @@
+<div>
+    <!-- 内容标题及介绍 -->
+    {% include 'article/top-meta.html' %}
+
+    <div class="divider"></div>
+
+    <!-- 第三方爬虫内容 -->
+    <div class="flow-text" id="omrss-third">
+        {% include 'article/third.html' %}
+    </div>
+
+    <div class="divider"></div>
+
+    <!-- 文章底部 -->
+    {% include 'article/bottom-meta.html' %}
+
+    <!-- 悬浮球 -->
+    <div class="fixed-action-btn">
+        <a class="btn-floating btn-large red">
+            <i class="large material-icons">more_vert</i>
+        </a>
+        <ul>
+            <li><a class="btn-floating yellow darken-1 tooltipped modal-trigger" data-position="left"
+                   data-tooltip="不看该作者所有文章" data-target="omrss-unsub-feed">
+                <i class="material-icons">delete</i></a>
+            </li>
+            <li><a id="omrss-top" class="btn-floating green darken-1 tooltipped" data-position="left"
+                   data-tooltip="回到顶部"><i class="material-icons">publish</i></a>
+            </li>
+
+            <li><a id="omrss-like" class="btn-floating red tooltipped" data-position="left"
+                   data-tooltip="喜欢" data-id="{{ article.uindex }}">
+                <i class="material-icons">thumb_up</i></a></li>
+        </ul>
+    </div>
+
+    <!-- 取消订阅确认框 -->
+    <div id="omrss-unsub-feed" class="modal">
+        <div class="modal-content">
+            <h2>确定吗？</h2>
+            <h4>取消后将收不到「{{ article.site.cname }}」的更新，您可以通过右上角的
+                <i class="material-icons omrss-color">rss_feed</i>重新订阅</h4>
+        </div>
+        <div class="modal-footer">
+            <a href="#!" class="modal-close waves-effect waves-red btn-flat">取消</a>
+            <a href="#!" class="modal-close waves-effect waves-green btn-flat" id="omrss-unlike"
+               data-site="{{ article.site.name }}">确定</a>
+        </div>
+    </div>
+
+</div>
+
+<script>
+    $('.fixed-action-btn').floatingActionButton();
+    $('.tooltipped').tooltip();
+    $('.modal').modal();
+    // $('.materialboxed').materialbox();
+
+    /* 文章置顶 */
+    $(document).on('click', '#omrss-top', function () {
+        $('#omrss-main').scrollTop(0);
+    });
+</script>
