@@ -31,6 +31,9 @@ ALLOWED_HOSTS = [
     'localhost',
     'ohmyrss.com',
     'www.ohmyrss.com',
+    'reiwarss.pythonanywhere.com',
+    'http://reiwarss.pythonanywhere.com/',
+    'www.reiwarss.pythonanywhere.com',
 ]
 
 # Application definition
