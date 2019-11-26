@@ -124,7 +124,7 @@ USE_L10N = True
 USE_TZ = True
 
 CRONJOBS = [
-   ('1 0-23 * * *', 'web.cron.update_all_user_feed'),
+   ('*/1 * * * *', 'web.cron.update_all_user_feed'),
    ('11 3 * * *', 'web.cron.clean_history_data')
 ]
 
