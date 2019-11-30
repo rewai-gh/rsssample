@@ -107,6 +107,7 @@ def get_articles_list(request):
     获取我的文章列表
     """
     sub_feeds = request.POST.get('sub_feeds', '').split(',')
+    print(sub_feeds[0])
     unsub_feeds = request.POST.get('unsub_feeds', '').split(',')
     page_size = int(request.POST.get('page_size', 10))
     page = int(request.POST.get('page', 1))
@@ -114,8 +115,12 @@ def get_articles_list(request):
 
     # 个人订阅处理
     my_sub_sites = get_subscribe_sites(tuple(sub_feeds), tuple(unsub_feeds))
-    my_articles = Article.objects.all().prefetch_related('site').filter(
-        status='active', site__name__in=my_sub_sites).order_by('-id')[:500]
+    my_articles = Article.objects.all().prefetch_related('site').filter(status='active', site__name__in=my_sub_sites).order_by('-id')[:500]
+   # myrssulr=Site.objects.filter(status='active', creator='user', star__gte=9, rss='RSS地址' )
+    #last_site = Site.objects.filter(status='active', creator='user', star__gte=9).order_by('-ctime')[0]
+
+    #for entry in feedparser.parse(myrssulr).entries:  
+    #    print(entry.title)
 
     if my_articles:
         # 分页处理，TODO 优化这里的性能

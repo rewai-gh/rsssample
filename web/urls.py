@@ -2,6 +2,8 @@ from django.urls import path
 
 from . import views_index, views_html, views_api, views_dash
 
+#https://docs.djangoproject.com/en/2.2/topics/http/urls/
+
 urlpatterns = [
     path('', views_index.index, name='index'),
     path('post/<int:uindex>', views_index.article, name='article'),

@@ -1,6 +1,7 @@
 
 from django.http import HttpResponseNotFound, HttpResponseServerError, JsonResponse
-from .models import *
+#from .models import *
+from .models import Article,Site,Message
 from datetime import date, timedelta, datetime
 from .utils import incr_action, get_subscribe_sites, get_hash_name
 from .views_html import get_all_issues
@@ -8,11 +9,12 @@ from .verify import verify_request
 import logging
 import feedparser
 import django
+from web.cron import update_all_user_feed
 
 logger = logging.getLogger(__name__)
 
 
-@verify_request
+#@verify_request
 def get_lastweek_articles(request):
     """
     过去一周的文章id列表
@@ -27,8 +29,8 @@ def get_lastweek_articles(request):
     lastweek_dt = datetime.now() - timedelta(days=7)
     
     my_sub_feeds = get_subscribe_sites(tuple(sub_feeds), tuple(unsub_feeds))
-    my_lastweek_articles = list(Article.objects.all().prefetch_related('site').filter(
-        status='active', site__name__in=my_sub_feeds, ctime__gte=lastweek_dt).values_list('uindex', flat=True))
+    my_lastweek_articles = list(Article.objects.all().prefetch_related('site').filter(status='active', site__name__in=my_sub_feeds, ctime__gte=lastweek_dt).values_list('uindex', flat=True))
+    #update_all_user_feed()
     return JsonResponse({"result": my_lastweek_articles})
 
 
@@ -79,6 +81,10 @@ def submit_a_feed(request):
     feed_url = request.POST.get('url', '').strip()[:200]
     if feed_url:
         feed_obj = feedparser.parse(feed_url)
+        #print(type(feed_obj))
+        #for entry in feedparser.parse(feed_url).entries:  
+        #    print(entry.title)
+
         if feed_obj.feed.get('title'):
             name = get_hash_name(feed_url)
             cname = feed_obj.feed.title[:20]
@@ -96,13 +102,18 @@ def submit_a_feed(request):
             author = feed_obj.feed.get('author', '')[:10]
             favicon = f"https://cdn.v2ex.com/gravatar/{name}?d=monsterid&s=32"
 
+            #site = Site(name=name, cname=cname, link=link, brief=brief, star=9, freq='小时', copyright=30, tag='RSS',creator='user', rss=feed_url, favicon=favicon, author=author)
+            #site.save()   
+                       
             try:
-                site = Site(name=name, cname=cname, link=link, brief=brief, star=9, freq='小时', copyright=30, tag='RSS',
-                            creator='user', rss=feed_url, favicon=favicon, author=author)
+                site = Site(name=name, cname=cname, link=link, brief=brief, star=9, freq='小时', copyright=30, tag='RSS',creator='user', rss=feed_url, favicon=favicon, author=author)
+               # site = Site(name=name, cname=cname, link=link, brief=brief, star=9, freq='小时', status='active',copyright=30, tag='RSS',
+               #             creator='user', rss=feed_url, favicon=favicon, author=author,ctime'11',mtime='22',renmark='nothing')            
                 site.save()
             except django.db.utils.IntegrityError:
                 logger.warning(f"数据插入失败：`{feed_url}")
             return JsonResponse({"name": name})
+            
         else:
             logger.warning(f"RSS解析失败：`{feed_url}")
     return HttpResponseNotFound("Param error")
