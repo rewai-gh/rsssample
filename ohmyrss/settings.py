@@ -27,10 +27,6 @@ DEBUG = True
 
 ALLOWED_HOSTS = [
     '127.0.0.1',
-    '192.168.31.189',
-    'localhost',
-    'ohmyrss.com',
-    'www.ohmyrss.com',
     'reiwarss.pythonanywhere.com',
     'http://reiwarss.pythonanywhere.com/',
     'www.reiwarss.pythonanywhere.com',
@@ -41,6 +37,7 @@ ALLOWED_HOSTS = [
 INSTALLED_APPS = [
     'django_crontab',
     'web.apps.WebConfig',
+    "django_cron",
 
     'django.contrib.admin',
     'django.contrib.auth',
@@ -123,7 +120,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'Asia/Shanghai'
+TIME_ZONE = 'Asia/Tokyo'
 
 USE_I18N = True
 
@@ -131,8 +128,11 @@ USE_L10N = True
 
 USE_TZ = True
 
+
+
 CRONJOBS = [
    ('*/1 * * * *', 'web.cron.update_all_user_feed'),
+   #('*/1 * * * *', 'web.djangocron.my_scheduled_job', '>>' +os.path.join(BASE_DIR,'log/debug7.log')),
    ('11 3 * * *', 'web.cron.clean_history_data')
 ]
 

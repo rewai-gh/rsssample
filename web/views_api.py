@@ -14,7 +14,7 @@ from web.cron import update_all_user_feed
 logger = logging.getLogger(__name__)
 
 
-#@verify_request
+@verify_request
 def get_lastweek_articles(request):
     """
     过去一周的文章id列表
@@ -30,7 +30,9 @@ def get_lastweek_articles(request):
     
     my_sub_feeds = get_subscribe_sites(tuple(sub_feeds), tuple(unsub_feeds))
     my_lastweek_articles = list(Article.objects.all().prefetch_related('site').filter(status='active', site__name__in=my_sub_feeds, ctime__gte=lastweek_dt).values_list('uindex', flat=True))
+    
     #update_all_user_feed()
+    
     return JsonResponse({"result": my_lastweek_articles})
 
 

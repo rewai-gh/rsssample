@@ -1,16 +1,17 @@
 scrapy
-bs4
-lxml
-requests
-django
-redis
-selenium
-feedparser
-requests
-django-crontab
-pyecharts
-gunicorn
-gevent
-pyyaml
-ua-parser
+bs41.9.5
+lxml4.4.2
+django2.2.7
+redis3.3.11
+selenium3.141.0
+feedparser5.2.1
+requests2.22.0
+django-crontab0.7.1
+pyecharts1.6.0
+gunicorn20.0.4
+gevent1.4.0
+pyyaml5.1.2
+ua-parser2.0
 user-agents
+pymysql 0.9.3
+mysqlclient 1.4.6
