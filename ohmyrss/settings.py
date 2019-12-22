@@ -12,6 +12,10 @@ https://docs.djangoproject.com/en/2.2/ref/settings/
 
 import os
 
+from redislite import Redis
+
+
+
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -131,8 +135,12 @@ USE_TZ = True
 
 
 CRONJOBS = [
-   ('*/1 * * * *', 'web.cron.update_all_user_feed'),
-   #('*/1 * * * *', 'web.djangocron.my_scheduled_job', '>>' +os.path.join(BASE_DIR,'log/debug7.log')),
+   ('1 0-23 * * *', 'web.cron.update_all_user_feed'),
+   ('*/5 * * * *', 'web.djangocron.my_sheduled_job'),
+
+   ('*/30 * * * *', 'web.djangocron.my_sheduled_30minjob'),
+   ('*/60 * * * *', 'web.djangocron.my_sheduled_60minjob'),
+   #('*/1 * * * *', 'web.cron.update_all_user_feed', '>>' +os.path.join(BASE_DIR,'log/debug7.log')),
    ('11 3 * * *', 'web.cron.clean_history_data')
 ]
 
@@ -152,6 +160,14 @@ REDIS_PORT = '6379'
 REDIS_FEED_DB = 0
 # for web use db
 REDIS_WEB_DB = 1
+
+# crete a redis instance using redislite
+REDIS_DB_PATH = os.path.join(BASE_DIR, 'my_redis.db')
+#rdb = Redis(REDIS_DB_PATH)
+#REDIS_SOCKET_PATH = 'redis+socket://%s' % (rdb.socket_file, )
+#BROKER_URL = REDIS_SOCKET_PATH
+
+
 
 # page view count, thumb count, open page count
 REDIS_VIEW_KEY = 'VIEW/%s'

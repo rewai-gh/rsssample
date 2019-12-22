@@ -3,9 +3,9 @@
 
 <blockquote id="omrss-article-stats">
     {% if article.site.copyright == 20 or article.site.copyright == 0 %}
-        摘要转载自
+        フィード配信先
     {% elif article.site.copyright == 30 %}
-        原文转载自
+    　　フィード配信先
     {% endif %}
     「{{ article.site.cname }}」 (<a href="{{ article.src_url }}" target="_blank" class="ev-open-src"
                                                   data-id="{{ article.uindex }}">{{ article.src_url |unquote }}</a>)

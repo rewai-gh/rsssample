@@ -23,7 +23,7 @@
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
 
 
-    <title>Oh My RSS - {{ article.title }}</title>
+    <title>令和 RSS - {{ article.title }}</title>
     <link rel="stylesheet" href="/assets/css/lib.css">
     <link rel="stylesheet" href="/assets/css/mobile.css?v=6">
     <link rel="shortcut icon" href="/assets/img/favicon.ico">
@@ -38,9 +38,9 @@
 
     <blockquote id="omrss-article-stats">
         {% if article.site.copyright == 20 or article.site.copyright == 0 %}
-            摘要转载自
+            フィード配信先
         {% elif article.site.copyright == 30 %}
-            原文转载自
+            フィード配信先
         {% endif %}
         「{{ article.site.cname }}」 (<a href="{{ article.src_url }}" target="_blank" class="ev-open-src"
                                        data-id="{{ article.uindex }}">{{ article.src_url |unquote }}</a>)
@@ -70,11 +70,11 @@
         <div class="text-darken-2" style="flex-grow: 1">
             <a href="{{ article.src_url |unquote }}" class="btn-flat waves-effect ev-open-src" target="_blank"
                 data-id="{{ article.uindex }}">
-                <i class="material-icons left" style="font-size: 1.13rem;">open_in_new</i>查看原文</a>
+                <i class="material-icons left" style="font-size: 1.13rem;">open_in_new</i>配信先を閲覧</a>
         </div>
         <div class="text-darken-2" style="flex-grow: 1">
             <a href="#!" class="btn-flat waves-effect" id="omrss-top">
-                <i class="material-icons left" style="font-size: 1.15rem;">publish</i>回到顶部</a>
+                <i class="material-icons left" style="font-size: 1.15rem;">publish</i>上に戻る</a>
         </div>
     </div>
 

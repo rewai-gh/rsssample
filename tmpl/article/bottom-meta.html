@@ -2,15 +2,15 @@
 
     {% if article.site.copyright == 20 or article.site.copyright == 0 %}
         <div class="text-darken-2 omrss-article-bottom center-align">
-            <a href="{{ article.src_url }}" target="_blank" class="tooltipped ev-open-src" data-tooltip="查看原文"
+            <a href="{{ article.src_url }}" target="_blank" class="tooltipped ev-open-src" data-tooltip="配信先を閲覧"
                data-position="top" data-id="{{ article.uindex }}">
-                <i class="material-icons omrss-article-bottom">open_in_new</i> 查看原文</a>
+                <i class="material-icons omrss-article-bottom">open_in_new</i> 配信先を閲覧</a>
         </div>
     {% else %}
         <div class="text-darken-2 omrss-article-bottom center-align">
-            <a href="{{ article.src_url }}" target="_blank" class="tooltipped ev-open-src" data-tooltip="去原文留言"
+            <a href="{{ article.src_url }}" target="_blank" class="tooltipped ev-open-src" data-tooltip="配信先を閲覧"
                data-position="top" data-id="{{ article.uindex }}">
-                <i class="material-icons omrss-article-bottom">open_in_new</i> 去原文留言</a>
+                <i class="material-icons omrss-article-bottom">open_in_new</i> 配信先を閲覧</a>
         </div>
     {% endif %}
 

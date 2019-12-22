@@ -29,8 +29,8 @@ def uv_line_chart() -> Line:
     uv_all_redis_keys = [settings.REDIS_UV_ALL_KEY % day for day in xaxis]
     uv_new_redis_keys = [settings.REDIS_UV_NEW_KEY % day for day in xaxis]
 
-    uv_all = R.mget(*uv_all_redis_keys)
-    uv_new = R.mget(*uv_new_redis_keys)
+    uv_all = redis_server.mget(*uv_all_redis_keys)
+    uv_new = redis_server.mget(*uv_new_redis_keys)
 
     line = (
         Line()
@@ -55,14 +55,15 @@ def refer_pv_line_chart() -> Line:
     """
     xaxis = get_xaxis_days(days=60)
 
-    uv_zhihu_redis_keys = [settings.REDIS_REFER_PV_DAY_KEY % ('link.zhihu.com', day) for day in xaxis]
-    uv_ryf_redis_keys = [settings.REDIS_REFER_PV_DAY_KEY % ('www.ruanyifeng.com', day) for day in xaxis]
-    uv_github_redis_keys = [settings.REDIS_REFER_PV_DAY_KEY % ('github.com', day) for day in xaxis]
-    uv_baidu_redis_keys = [settings.REDIS_REFER_PV_DAY_KEY % ('www.baidu.com', day) for day in xaxis]
+    uv_twitter_redis_keys = [settings.REDIS_REFER_PV_DAY_KEY % ('www.twitter.com', day) for day in xaxis]
+    uv_instagram_redis_keys = [settings.REDIS_REFER_PV_DAY_KEY % ('www.instagram.com', day) for day in xaxis]
+    uv_bing_redis_keys = [settings.REDIS_REFER_PV_DAY_KEY % ('www.bing.com', day) for day in xaxis]
+    uv_facebook_redis_keys = [settings.REDIS_REFER_PV_DAY_KEY % ('www.facebook.com', day) for day in xaxis]
     uv_google_redis_keys = [settings.REDIS_REFER_PV_DAY_KEY % ('www.google.com', day) for day in xaxis]
-    uv_hao123_redis_keys = [settings.REDIS_REFER_PV_DAY_KEY % ('www.hao123.com', day) for day in xaxis]
-    uv_wanqu_redis_keys = [settings.REDIS_REFER_PV_DAY_KEY % ('wanqu.co', day) for day in xaxis]
+    uv_qiita_redis_keys = [settings.REDIS_REFER_PV_DAY_KEY % ('www.qiita.com', day) for day in xaxis]
+    uv_yahoo_redis_keys = [settings.REDIS_REFER_PV_DAY_KEY % ('www.yahoo.co.jp', day) for day in xaxis]
 
+    """
     uv_zhihu = R.mget(*uv_zhihu_redis_keys)
     uv_ryf = R.mget(*uv_ryf_redis_keys)
     uv_github = R.mget(*uv_github_redis_keys)
@@ -70,17 +71,26 @@ def refer_pv_line_chart() -> Line:
     uv_google = R.mget(*uv_google_redis_keys)
     uv_hao123 = R.mget(*uv_hao123_redis_keys)
     uv_wanqu = R.mget(*uv_wanqu_redis_keys)
+    """
+    uv_twitter = redis_server.hmget(*uv_twitter_redis_keys)
+    uv_instagram = redis_server.hmget(*uv_instagram_redis_keys)
+    uv_bing = redis_server.hmget(*uv_bing_redis_keys)
+    uv_facebook = redis_server.hmget(*uv_facebook_redis_keys)
+    uv_google = redis_server.hmget(*uv_google_redis_keys)
+    uv_qiita = redis_server.hmget(*uv_qiita_redis_keys)
+    uv_yahoo = redis_server.hmget(*uv_yahoo_redis_keys)
+
 
     line = (
         Line()
         .add_xaxis(xaxis)
-        .add_yaxis("zhihu", uv_zhihu, is_connect_nones=True, is_smooth=True)
-        .add_yaxis("ruanyifeng", uv_ryf, is_connect_nones=True, is_smooth=True)
-        .add_yaxis("github", uv_github, is_connect_nones=True, is_smooth=True)
-        .add_yaxis("baidu", uv_baidu, is_connect_nones=True, is_smooth=True)
+        .add_yaxis("twitter", uv_twitter, is_connect_nones=True, is_smooth=True)
+        .add_yaxis("instagram", uv_instagram, is_connect_nones=True, is_smooth=True)
+        .add_yaxis("bing", uv_bing, is_connect_nones=True, is_smooth=True)
+        .add_yaxis("facebook", uv_facebook, is_connect_nones=True, is_smooth=True)
         .add_yaxis("google", uv_google, is_connect_nones=True, is_smooth=True)
-        .add_yaxis("hao123", uv_hao123, is_connect_nones=True, is_smooth=True)
-        .add_yaxis("wanqu", uv_wanqu, is_connect_nones=True, is_smooth=True)
+        .add_yaxis("qiita", uv_qiita, is_connect_nones=True, is_smooth=True)
+        .add_yaxis("yahoo", uv_yahoo, is_connect_nones=True, is_smooth=True)
         .set_global_opts(title_opts=options.TitleOpts(title="Referer各域名PV走势"),
                          yaxis_opts=options.AxisOpts(
                              is_scale=True,
@@ -94,16 +104,16 @@ def refer_pv_line_chart() -> Line:
 
 
 def refer_pie_chart() -> Pie:
-    refer_hosts = list(filter(lambda x: x, R.smembers(settings.REDIS_REFER_ALL_KEY)))
+    refer_hosts = list(filter(lambda x: x, redis_server.smembers(settings.REDIS_REFER_ALL_KEY)))
     refer_host_pv_keys = [settings.REDIS_REFER_PV_KEY % host for host in refer_hosts]
 
     c = (
         Pie()
         .add(
             "",
-            [list(z) for z in zip(refer_hosts, R.mget(*refer_host_pv_keys))],
-            # radius=["30%", "75%"],
-            # rosetype="radius",
+            [list(z) for z in zip(refer_hosts, redis_server.mget(*refer_host_pv_keys))],
+             radius=["30%", "75%"],
+             rosetype="radius",
         )
         .set_global_opts(
             title_opts=options.TitleOpts(title="Referer来源占比"),

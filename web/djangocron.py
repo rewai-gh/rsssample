@@ -6,16 +6,12 @@ from web.cron import *
 
 logger = logging.getLogger(__name__)
 
-class MyCronJob(CronJobBase):
-    RUN_EVERY_MINS =1
-    schedule = Schedule(run_every_mins=RUN_EVERY_MINS)
-    code='web.cron.update_all_user_feed'
-    def do(self):
-        logger.info('测试RSS定期任务')
+def my_sheduled_job():
+    print("the job sheduler stared")
 
 
+def my_sheduled_30minjob():
+    print("the  30 min job sheduler stared")
 
-
-def my_scheduled_job():
-    logger.info('测试RSS定期任务,1min')
-    update_all_user_feed()
+def my_sheduled_60minjob():
+    print("the  60 min job sheduler stared")    

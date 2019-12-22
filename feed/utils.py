@@ -4,6 +4,8 @@ import os
 import redis
 from ohmyrss.settings import REDIS_FEED_DB, REDIS_HOST, REDIS_PORT
 import time
+from random import seed
+from random import random
 
 
 R = redis.Redis(host=REDIS_HOST, port=REDIS_PORT, db=REDIS_FEED_DB, decode_responses=True)
@@ -27,4 +29,8 @@ def mark_crawled_url(*urls):
 
 
 def current_ts():
-    return int(time.time() * 1000)
+    #seed(1000)
+    rannum=random()
+    current_ts=int(time.time()*rannum)
+
+    return current_ts

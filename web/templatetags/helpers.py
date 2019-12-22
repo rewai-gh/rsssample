@@ -15,6 +15,7 @@ def to_stars(num):
     :return:
     """
     return '★' * int(num / 10)
+    #return int(num / 10)
 
 
 @register.filter
@@ -48,6 +49,7 @@ def to_thumb_uv(uv_dict, uindex):
     :return:
     """
     return uv_dict.get(settings.REDIS_THUMB_KEY % uindex) or 0
+
 
 
 @register.filter

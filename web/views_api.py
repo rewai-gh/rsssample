@@ -9,30 +9,39 @@ from .verify import verify_request
 import logging
 import feedparser
 import django
-from web.cron import update_all_user_feed
 
 logger = logging.getLogger(__name__)
 
+defaultsubmitted=tuple()
+defaultunsubmitted=tuple()
 
 @verify_request
 def get_lastweek_articles(request):
     """
     过去一周的文章id列表
     """
+    #default_sub=['d253a81dcbd138d0b9e275e17e711e18','7eaee5ad5cebcdb9ca29151cb77c6f19','dc74259bf233633f98148ecb0423c754', 'd4acab5a091984c4fa986c3c8c48d5ff', '8c1186f4afd3db1bb6fba8a295e2849c', 'de4e43493bc02ea735d6ef5f841dcdd6']
+    #default_unsub=['c2941323f00ad4606e2f76cc472e984b','fe4626441957500dee088f5864015f94', '59ac2d060c62d16daaaceb530155e9c0', '640d9f4046fc002b9df768130bd4e334']
+     
+
     uid = request.POST.get('uid', '')
+
     sub_feeds = request.POST.get('sub_feeds', '').split(',')
     unsub_feeds = request.POST.get('unsub_feeds', '').split(',')
+
     ext = request.POST.get('ext', '')
 
+    #sub_feeds =list(set(sub_feeds) - set(default_sub))
+    #unsub_feeds=list(set(unsub_feeds) - set(default_unsub))
     logger.info(f"收到订阅源查询请求：`{uid}`{sub_feeds}`{unsub_feeds}`{ext}")
 
     lastweek_dt = datetime.now() - timedelta(days=7)
     
     my_sub_feeds = get_subscribe_sites(tuple(sub_feeds), tuple(unsub_feeds))
+
+
     my_lastweek_articles = list(Article.objects.all().prefetch_related('site').filter(status='active', site__name__in=my_sub_feeds, ctime__gte=lastweek_dt).values_list('uindex', flat=True))
-    
-    #update_all_user_feed()
-    
+   
     return JsonResponse({"result": my_lastweek_articles})
 
 
@@ -88,7 +97,7 @@ def submit_a_feed(request):
         #    print(entry.title)
 
         if feed_obj.feed.get('title'):
-            name = get_hash_name(feed_url)
+            name = get_hash_name(feed_url)# サイト名をハッシュ掛け
             cname = feed_obj.feed.title[:20]
 
             if feed_obj.feed.get('link'):
@@ -114,6 +123,7 @@ def submit_a_feed(request):
                 site.save()
             except django.db.utils.IntegrityError:
                 logger.warning(f"数据插入失败：`{feed_url}")
+
             return JsonResponse({"name": name})
             
         else:

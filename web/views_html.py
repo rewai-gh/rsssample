@@ -5,9 +5,11 @@ from .models import *
 from .utils import get_page_uv, get_subscribe_sites
 from .verify import verify_request
 import logging
+from web.cron import update_subsite_user_feed,clean_history_data
+from user_agents import parse
 
 logger = logging.getLogger(__name__)
-
+global_subsite=[]
 
 @verify_request
 def get_article_detail(request):
@@ -106,21 +108,40 @@ def get_articles_list(request):
     """
     获取我的文章列表
     """
+    
     sub_feeds = request.POST.get('sub_feeds', '').split(',')
-    print(sub_feeds[0])
     unsub_feeds = request.POST.get('unsub_feeds', '').split(',')
     page_size = int(request.POST.get('page_size', 10))
     page = int(request.POST.get('page', 1))
     mobile = request.POST.get('mobile', False)
+    user_agent = parse(request.META.get('HTTP_USER_AGENT', ''))
 
     # 个人订阅处理
-    my_sub_sites = get_subscribe_sites(tuple(sub_feeds), tuple(unsub_feeds))
-    my_articles = Article.objects.all().prefetch_related('site').filter(status='active', site__name__in=my_sub_sites).order_by('-id')[:500]
-   # myrssulr=Site.objects.filter(status='active', creator='user', star__gte=9, rss='RSS地址' )
-    #last_site = Site.objects.filter(status='active', creator='user', star__gte=9).order_by('-ctime')[0]
 
+    my_sub_sites = get_subscribe_sites(tuple(sub_feeds), tuple(unsub_feeds)) 
+    global_subsite=my_sub_sites
+    
+    update_subsite_user_feed(global_subsite)
+    clean_history_data()
+
+    if not my_sub_sites== ['']:
+        print("empty sub")
+
+    logger.info(f"订阅的网站`{my_sub_sites}`")
+
+    try:
+       my_articles = Article.objects.all().prefetch_related('site').filter(status='active', site__name__in=my_sub_sites).order_by('-ctime')[:100]
+       #my_articles = Article.objects.all().filter(status='active', site__name__in=my_sub_sites).order_by('-id')[:100]
+
+       my_articles_list = list(Article.objects.all())
+
+    except IndexError:
+        logger.warning("订阅内容空的")
+       
     #for entry in feedparser.parse(myrssulr).entries:  
     #    print(entry.title)
+    #entry_list = list(Article.objects.all())
+    #print(entry_list)
 
     if my_articles:
         # 分页处理，TODO 优化这里的性能
